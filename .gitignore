@@ -1,0 +1,16 @@
+# Model files (too large for github)
+*.tflite
+*.task
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual environment
+venv/
+env/
+
+# System files
+.DS_Store
+Thumbs.db
