@@ -1,10 +1,12 @@
-\# ❤️ Contactless Pulse Detector Using Facial Video
+\# ❤️ Contactless Pulse Detection Using Face Video
 
 
 
-A college project that detects heart rate (BPM) from a webcam video
+A college project that detects heart rate and other vital signs
 
-using Remote Photoplethysmography (rPPG) — no physical contact needed!
+from a webcam video using Remote Photoplethysmography (rPPG).
+
+No physical contact needed!
 
 
 
@@ -16,11 +18,23 @@ using Remote Photoplethysmography (rPPG) — no physical contact needed!
 
 
 
-This project measures your pulse by analyzing tiny color changes
+This project measures vital signs by analyzing tiny color changes
 
-in your face skin that happen every time your heart beats.
+in face skin caused by blood flow, captured through a webcam.
 
-The camera detects these changes and converts them into BPM.
+
+
+\### Parameters detected:
+
+\- ❤️ Heart Rate (BPM)
+
+\- 🫁 Breathing Rate (breaths/min)
+
+\- 😰 Stress Level (HRV analysis)
+
+\- 🩸 SpO2 (Blood Oxygen estimation)
+
+\- 📊 Overall Health Score
 
 
 
@@ -28,23 +42,31 @@ The camera detects these changes and converts them into BPM.
 
 
 
-\## 🧠 How It Works
+\## 🧠 How It WorksWebcam → Face Detection → Landmarks → ROI Selection
 
 
 
-1\. Webcam captures live video of your face
+→ Green Signal → Buffer → FFT → BPM
 
-2\. MediaPipe detects your face and finds landmark points
 
-3\. Cheek region (ROI) is selected using landmark points
 
-4\. Average green channel value is extracted from cheeks every frame
+1\. Webcam captures live video of face
 
-5\. 150 frames of green values are stored in a buffer
+2\. MediaPipe detects face and finds 478 landmark points
 
-6\. FFT (Fast Fourier Transform) finds the dominant pulse frequency
+3\. Cheek and forehead regions selected as ROI
 
-7\. Frequency is converted to BPM and displayed live
+4\. Green channel value extracted from ROI every frame
+
+5\. 150 frames stored in buffer (5 seconds of data)
+
+6\. Bandpass filter removes noise
+
+7\. FFT finds dominant pulse frequency
+
+8\. Frequency converted to BPM
+
+9\. CHROM and POS algorithms improve accuracy
 
 
 
@@ -62,11 +84,9 @@ The camera detects these changes and converts them into BPM.
 
 \- MediaPipe — face detection and landmarks
 
-\- NumPy — signal processing and arrays
+\- NumPy — signal processing
 
-\- SciPy — bandpass filter for noise removal
-
-\- Matplotlib — signal visualization
+\- SciPy — bandpass filter
 
 \- Streamlit — web interface
 
@@ -80,33 +100,85 @@ The camera detects these changes and converts them into BPM.
 
 rppg-pulse-detector/
 
-├── main.py                    # Run this to start!
 
-├── requirements.txt           # All libraries
 
-├── README.md                  # This file
+├── main.py                      # Run this to start
 
-├── .gitignore                 # Files to ignore
+
+
+├── requirements.txt             # All libraries needed
+
+
+
+├── README.md                    # This file
+
+
+
+├── .gitignore                   # Files to ignore
+
+
 
 └── src/
 
-├── step1\_webcam.py        # Step 1: Open webcam
 
-├── step2\_face\_detection.py # Step 2: Detect face
 
-├── step3\_landmarks.py     # Step 3: Face landmarks
+├── step1\_webcam.py          # Open webcam
 
-├── step4\_roi.py           # Step 4: Select cheek ROI
 
-├── step5\_signal.py        # Step 5: Extract green signal
 
-├── step6\_buffer.py        # Step 6: Buffer signal
+├── step2\_face\_detection.py  # Detect face
 
-├── step7\_bpm.py           # Step 7: Calculate BPM
 
-├── step8\_live\_display.py  # Step 8: Live display
 
-└── app.py                 # Web version
+├── step3\_landmarks.py       # Face landmarks
+
+
+
+├── step4\_roi.py             # Select cheek ROI
+
+
+
+├── step5\_signal.py          # Extract green signal
+
+
+
+├── step6\_buffer.py          # Buffer signal
+
+
+
+├── step7\_bpm.py             # Calculate BPM
+
+
+
+├── step8\_live\_display.py    # Live display
+
+
+
+├── step9\_chrom\_bpm.py       # CHROM algorithm
+
+
+
+├── step10\_pos\_bpm.py        # POS algorithm
+
+
+
+├── step11\_breathing.py      # Breathing rate
+
+
+
+├── step12\_hrv\_stress.py     # HRV and stress
+
+
+
+├── step13\_spo2.py           # SpO2 estimation
+
+
+
+├── step14\_fusion.py         # Final dashboard
+
+
+
+└── app.py                   # Web version
 
 
 
@@ -118,17 +190,27 @@ rppg-pulse-detector/
 
 
 
-1\. Clone this repository:
+\### Step 1 — Clone the repository
 
 git clone https://github.com/hariharanchukkala/rppg-pulse-detector.git
 
-2\. Install required libraries:
+
+
+cd rppg-pulse-detector
+
+
+
+\### Step 2 — Install libraries
 
 pip install -r requirements.txt
 
-3\. Run the project:
+
+
+\### Step 3 — Run the project
 
 python main.py
+
+
 
 \---
 
@@ -138,11 +220,39 @@ python main.py
 
 
 
-\- Detects BPM in approximately 5 seconds
+| Parameter | Normal Range | Our Result |
 
-\- Normal range: 60-100 BPM
+|-----------|-------------|------------|
 
-\- Accuracy improves when sitting still with good lighting
+| Heart Rate | 60-100 BPM | 60-80 BPM |
+
+| Breathing | 12-20/min | 14/min |
+
+| SpO2 | 95-100% | \~97% |
+
+| Stress | Low is good | Very Relaxed |
+
+| Health Score | 80+ is good | 80/100 |
+
+
+
+\---
+
+
+
+\## 📈 Algorithms Used
+
+
+
+| Algorithm | Accuracy | Method |
+
+|-----------|----------|--------|
+
+| Green channel | Basic | Single channel |
+
+| CHROM | Better | 3 channel chrominance |
+
+| POS | Best | Skin plane projection |
 
 
 
@@ -158,7 +268,9 @@ python main.py
 
 \- Movement reduces accuracy
 
-\- Not a medical device — for educational purposes only
+\- SpO2 is estimated — not medical grade
+
+\- Not a medical device — educational only
 
 
 
@@ -170,11 +282,13 @@ python main.py
 
 
 
-\- Name: Harih
+\- Name: Hariharan Chukkala
 
-\- College Project — B.Tech
+\- Project: B.Tech College Project
 
 \- Domain: Computer Vision and Signal Processing
+
+\- GitHub: github.com/hariharanchukkala
 
 
 
@@ -186,11 +300,31 @@ python main.py
 
 
 
-\- MediaPipe Face Landmarker — Google
+1\. Verkruysse et al. (2008) — Remote plethysmographic imaging
 
-\- Remote Photoplethysmography (rPPG) research
+2\. MediaPipe Face Landmarker — Google AI
 
-\- Samuel Pröll — Extracting heartbeat signals from webcam video
+3\. de Haan \& Jeanne (2013) — CHROM algorithm
 
-\- OpenCV Documentation
+4\. Wang et al. (2016) — POS algorithm
+
+5\. OpenCV Documentation
+
+6\. SciPy Signal Processing Documentation
+
+
+
+\---
+
+
+
+\## ⚠️ Disclaimer
+
+
+
+This project is for educational purposes only.
+
+It is NOT a medical device.
+
+Always consult a doctor for health concerns.
 

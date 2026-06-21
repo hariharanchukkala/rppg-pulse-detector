@@ -1,4 +1,4 @@
-# Model files (too large for github)
+# Model files (too large for GitHub)
 *.tflite
 *.task
 
@@ -6,11 +6,40 @@
 __pycache__/
 *.pyc
 *.pyo
+*.pyd
+.Python
 
 # Virtual environment
 venv/
 env/
+.env/
+
+# IDE files
+.vscode/
+.idea/
+*.suo
+*.user
 
 # System files
 .DS_Store
 Thumbs.db
+desktop.ini
+
+# Log files
+*.log
+*.txt.bak
+
+# Temporary files
+*.tmp
+*.temp
+
+# Large data files
+*.csv
+*.xlsx
+*.json
+
+# Step 15 (experimental - not needed)
+step15_accurate_bpm.py
+brightness_fix.py
+camtest.py
+run_app.py
